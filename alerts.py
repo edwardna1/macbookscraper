@@ -1,12 +1,16 @@
-"""Send alerts via Twilio SMS. Format: title, price, specs, value rank, link."""
+"""Send alerts via Telegram Bot. Format: title, price, specs, value rank, link."""
 import logging
 from typing import Any
+
+import httpx
 
 import config
 
 logger = logging.getLogger(__name__)
 
-MAX_SMS_LENGTH = 1600  # Keep under to avoid excessive segments
+# Telegram allows up to 4096 chars per message
+MAX_MESSAGE_LENGTH = 4096
+TELEGRAM_API = "https://api.telegram.org"
 
 
 def _format_price(p: dict[str, Any]) -> str:
@@ -46,29 +50,26 @@ def _format_message(
         line = f"PRICE DROP: {p.get('title', '')[:60]} — was ${prev_price:,.0f}, now {_format_price(p)} — {p.get('url', '')}"
         parts.append(line)
     msg = "\n\n".join(parts)
-    if len(msg) > MAX_SMS_LENGTH:
-        msg = msg[: MAX_SMS_LENGTH - 20] + "\n…(truncated)"
+    if len(msg) > MAX_MESSAGE_LENGTH:
+        msg = msg[: MAX_MESSAGE_LENGTH - 20] + "\n…(truncated)"
     return msg
 
 
-def send_sms(body: str) -> bool:
-    """Send one SMS via Twilio. Returns True on success."""
-    if not config.twilio_configured():
-        logger.warning("Twilio not configured; skipping SMS")
+def send_telegram(body: str) -> bool:
+    """Send one message via Telegram Bot API. Returns True on success."""
+    if not config.telegram_configured():
+        logger.warning("Telegram not configured; skipping alert")
         return False
+    url = f"{TELEGRAM_API}/bot{config.TELEGRAM_BOT_TOKEN}/sendMessage"
+    payload = {"chat_id": config.TELEGRAM_CHAT_ID, "text": body}
     try:
-        from twilio.rest import Client
-
-        client = Client(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
-        client.messages.create(
-            body=body,
-            from_=config.TWILIO_FROM_NUMBER,
-            to=config.TWILIO_TO_NUMBER,
-        )
-        logger.info("SMS sent to %s", config.TWILIO_TO_NUMBER)
+        with httpx.Client(timeout=15) as client:
+            r = client.post(url, json=payload)
+            r.raise_for_status()
+        logger.info("Telegram message sent to chat_id %s", config.TELEGRAM_CHAT_ID)
         return True
     except Exception as e:
-        logger.exception("Twilio SMS failed: %s", e)
+        logger.exception("Telegram send failed: %s", e)
         return False
 
 
@@ -76,8 +77,8 @@ def alert_new_and_price_drops(
     new_products: list[dict[str, Any]],
     price_drops: list[tuple[dict[str, Any], float]],
 ) -> bool:
-    """Format and send one SMS for all new matches and price drops. Returns True if sent."""
+    """Format and send one Telegram message for all new matches and price drops. Returns True if sent."""
     if not new_products and not price_drops:
         return False
     msg = _format_message(new_products, price_drops)
-    return send_sms(msg)
+    return send_telegram(msg)

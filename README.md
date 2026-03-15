@@ -4,7 +4,7 @@ Lightweight monitor that watches Apple Canada’s refurbished Mac store for **Ma
 
 - **M4 Pro**, **M3 Pro**, or **M2 Pro** with **36GB+ RAM**
 
-It ranks matches by value, avoids duplicate alerts using a local JSON store, and can notify you via **Twilio SMS** for new matches or price drops.
+It ranks matches by value, avoids duplicate alerts using a local JSON store, and can notify you via **Telegram** for new matches or price drops.
 
 ## Setup
 
@@ -22,13 +22,12 @@ It ranks matches by value, avoids duplicate alerts using a local JSON store, and
    pip install -r requirements.txt
    ```
 
-3. **Configure Twilio and options:**
+3. **Configure Telegram and options:**
 
    Copy `.env.example` to `.env` and set:
 
-   - `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` – from [Twilio Console](https://console.twilio.com)
-   - `TWILIO_FROM_NUMBER` – your Twilio phone number (e.g. `+1234567890`)
-   - `TWILIO_TO_NUMBER` – your phone number to receive SMS (e.g. `+1234567890`)
+   - `TELEGRAM_BOT_TOKEN` – from [@BotFather](https://t.me/BotFather) (send `/newbot`, follow prompts)
+   - `TELEGRAM_CHAT_ID` – your chat ID (start a chat with your bot, then e.g. visit `https://api.telegram.org/bot<TOKEN>/getUpdates` and look for `"chat":{"id": ... }`)
 
    Optional:
 
@@ -49,7 +48,7 @@ It ranks matches by value, avoids duplicate alerts using a local JSON store, and
   python monitor.py
   ```
 
-Without Twilio configured, the monitor still runs and logs what it would have alerted.
+Without Telegram configured, the monitor still runs and logs what it would have alerted.
 
 ## Project layout
 
@@ -59,24 +58,27 @@ Without Twilio configured, the monitor still runs and logs what it would have al
 | `parser.py`  | Fetch Apple refurb listing and product detail pages; normalize to structured products |
 | `filters.py` | Keep only MacBook Pro, M2/M3/M4 Pro, RAM ≥ 36GB |
 | `ranker.py`  | Value score and sort; mark best current deal |
-| `alerts.py`  | Twilio SMS formatting and send |
+| `alerts.py`  | Telegram Bot message formatting and send |
 | `storage.py` | JSON file: seen product IDs, last price, last alerted (for new vs price-drop alerts) |
 | `config.py`  | Settings from env (`.env` via python-dotenv) |
 
-## GitHub Actions (optional)
+## GitHub Actions (run in the cloud, no laptop needed)
 
-To run on a schedule (e.g. every 5 minutes), add a workflow and secrets:
+The workflow runs every 5 minutes on GitHub’s servers, so **you don’t need your laptop on or WiFi** — it uses GitHub’s internet to fetch Apple and send Telegram.
 
-- In the repo: **Settings → Secrets and variables → Actions**, add:
-  - `TWILIO_ACCOUNT_SID`
-  - `TWILIO_AUTH_TOKEN`
-  - `TWILIO_FROM_NUMBER`
-  - `TWILIO_TO_NUMBER`
+**Setup:**
 
-Then use the workflow in `.github/workflows/monitor.yml` (see that file for the schedule).
+1. In your repo go to **Settings → Secrets and variables → Actions**.
+2. **New repository secret** for each:
+   - `TELEGRAM_BOT_TOKEN` (from BotFather)
+   - `TELEGRAM_CHAT_ID` (your numeric chat ID, e.g. from `python get_chat_id.py`)
+3. Open the **Actions** tab, select **Refurb Monitor**, and run **Enable workflow** if it’s disabled.
+
+**Persistence:** The workflow commits `seen_products.json` back into the repo after each run. That way the next run sees what was already alerted, so you only get Telegram alerts for **new** listings or **price drops**, not the same deals every 5 minutes.
 
 ## Notes
 
 - **No browser automation** – HTTP only; no checkout or cart.
 - **Storage** – `seen_products.json` (or `STORAGE_PATH`) stores product URL, last price, first/last seen and last alerted timestamps so you only get one alert per new listing (and again on price drop).
 - **Detail pages** – RAM/SSD are read from each MacBook Pro M2/M3/M4 Pro product page so only those matching chip type get extra requests.
+- **Internet** – The script needs the internet to fetch Apple and send Telegram. When you use **GitHub Actions**, that happens on GitHub’s servers, so your laptop and WiFi don’t need to be on.

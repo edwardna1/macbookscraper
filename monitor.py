@@ -49,11 +49,11 @@ def run_once() -> None:
     to_alert_drops = price_drops
 
     if to_alert_new or to_alert_drops:
-        if config.twilio_configured():
+        if config.telegram_configured():
             alerts.alert_new_and_price_drops(to_alert_new, to_alert_drops)
             storage.mark_alerted(data, to_alert_new + [p for p, _ in to_alert_drops])
         else:
-            logger.warning("Twilio not configured; would have alerted %s new, %s drops",
+            logger.warning("Telegram not configured; would have alerted %s new, %s drops",
                           len(to_alert_new), len(to_alert_drops))
     else:
         logger.info("No new matches or price drops to alert")

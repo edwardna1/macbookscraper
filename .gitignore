@@ -1,4 +1,6 @@
+# Never commit secrets (Telegram token, etc.)
 .env
+.env.local
 .venv/
 venv/
 __pycache__/
