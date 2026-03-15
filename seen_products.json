@@ -159,5 +159,54 @@
     "last_alerted_price": 4149.0,
     "last_seen_ts": 1773549727.7030807,
     "last_price": 4149.0
+  },
+  "https://www.apple.com/ca/shop/product/fx2j3ll/a/Refurbished-14-inch-MacBook-Pro-Apple-M4-Pro-Chip-with-14%E2%80%91Core-CPU-and-20%E2%80%91Core-GPU-Space-Black?fnode=b4e95ac6be512936ec7fd0d1b45c6dacde9b924aaebd9dd4587fbf780e64ca51badf8c31645d093452d6cd3cb4e002942136913839a08bce7b48e111e19bf794be92dea0a395a1c2e80e9b8bfee49d62": {
+    "first_seen_ts": 1773556990.1577337,
+    "last_alerted_ts": 1773556990.77983,
+    "last_alerted_price": 2709.0,
+    "last_seen_ts": 1773556990.1577337,
+    "last_price": 2709.0
+  },
+  "https://www.apple.com/ca/shop/product/g1fe1ll/a/Refurbished-14-inch-MacBook-Pro-Apple-M4-Pro-Chip-with-12%E2%80%91Core-CPU-and-16%E2%80%91Core-GPU-Space-Black?fnode=b4e95ac6be512936ec7fd0d1b45c6dacde9b924aaebd9dd4587fbf780e64ca51badf8c31645d093452d6cd3cb4e002942136913839a08bce7b48e111e19bf794be92dea0a395a1c2e80e9b8bfee49d62": {
+    "first_seen_ts": 1773556990.1577337,
+    "last_alerted_ts": 1773556990.77983,
+    "last_alerted_price": 2929.0,
+    "last_seen_ts": 1773556990.1577337,
+    "last_price": 2929.0
+  },
+  "https://www.apple.com/ca/shop/product/g1ff0ll/a/Refurbished-14-inch-MacBook-Pro-Apple-M4-Pro-Chip-with-14%E2%80%91Core-CPU-and-20%E2%80%91Core-GPU-Space-Black?fnode=b4e95ac6be512936ec7fd0d1b45c6dacde9b924aaebd9dd4587fbf780e64ca51badf8c31645d093452d6cd3cb4e002942136913839a08bce7b48e111e19bf794be92dea0a395a1c2e80e9b8bfee49d62": {
+    "first_seen_ts": 1773556990.1577337,
+    "last_alerted_ts": 1773556990.77983,
+    "last_alerted_price": 3139.0,
+    "last_seen_ts": 1773556990.1577337,
+    "last_price": 3139.0
+  },
+  "https://www.apple.com/ca/shop/product/g1fc6ll/a/Refurbished-14-inch-MacBook-Pro-Apple-M4-Pro-Chip-with-14%E2%80%91Core-CPU-and-20%E2%80%91Core-GPU-Nano-texture-display-Silver?fnode=b4e95ac6be512936ec7fd0d1b45c6dacde9b924aaebd9dd4587fbf780e64ca51badf8c31645d093452d6cd3cb4e002942136913839a08bce7b48e111e19bf794be92dea0a395a1c2e80e9b8bfee49d62": {
+    "first_seen_ts": 1773556990.1577337,
+    "last_alerted_ts": 1773556990.77983,
+    "last_alerted_price": 3299.0,
+    "last_seen_ts": 1773556990.1577337,
+    "last_price": 3299.0
+  },
+  "https://www.apple.com/ca/shop/product/g1fe2ll/a/Refurbished-14-inch-MacBook-Pro-Apple-M4-Pro-Chip-with-12%E2%80%91Core-CPU-and-16%E2%80%91Core-GPU-Space-Black?fnode=b4e95ac6be512936ec7fd0d1b45c6dacde9b924aaebd9dd4587fbf780e64ca51badf8c31645d093452d6cd3cb4e002942136913839a08bce7b48e111e19bf794be92dea0a395a1c2e80e9b8bfee49d62": {
+    "first_seen_ts": 1773556990.1577337,
+    "last_alerted_ts": 1773556990.77983,
+    "last_alerted_price": 3559.0,
+    "last_seen_ts": 1773556990.1577337,
+    "last_price": 3559.0
+  },
+  "https://www.apple.com/ca/shop/product/g1ff9ll/a/Refurbished-14-inch-MacBook-Pro-Apple-M4-Pro-Chip-with-14%E2%80%91Core-CPU-and-20%E2%80%91Core-GPU-Nano-texture-display-Space-Black?fnode=b4e95ac6be512936ec7fd0d1b45c6dacde9b924aaebd9dd4587fbf780e64ca51badf8c31645d093452d6cd3cb4e002942136913839a08bce7b48e111e19bf794be92dea0a395a1c2e80e9b8bfee49d62": {
+    "first_seen_ts": 1773556990.1577337,
+    "last_alerted_ts": 1773556990.77983,
+    "last_alerted_price": 3719.0,
+    "last_seen_ts": 1773556990.1577337,
+    "last_price": 3719.0
+  },
+  "https://www.apple.com/ca/shop/product/g1felll/a/Refurbished-14-inch-MacBook-Pro-Apple-M4-Pro-Chip-with-12%E2%80%91Core-CPU-and-16%E2%80%91Core-GPU-Nano-texture-display-Space-Black?fnode=b4e95ac6be512936ec7fd0d1b45c6dacde9b924aaebd9dd4587fbf780e64ca51badf8c31645d093452d6cd3cb4e002942136913839a08bce7b48e111e19bf794be92dea0a395a1c2e80e9b8bfee49d62": {
+    "first_seen_ts": 1773556990.1577337,
+    "last_alerted_ts": 1773556990.77983,
+    "last_alerted_price": 4149.0,
+    "last_seen_ts": 1773556990.1577337,
+    "last_price": 4149.0
   }
 }
