@@ -1,15 +1,20 @@
-# Run the monitor every 5 minutes. Persists seen_products.json so you only get alerts for new/dropped prices.
-# Repo secrets required: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+# Manual run anytime + auto every 10 min (offset cron to avoid GitHub load spikes).
+# Repo secrets: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 name: Refurb Monitor
 on:
+  workflow_dispatch:
   schedule:
-    - cron: "*/5 * * * *"   # every 5 minutes
-  workflow_dispatch: {}
+    - cron: "7,17,27,37,47,57 * * * *"   # every 10 min, offset from :00
+
 jobs:
   run:
     runs-on: ubuntu-latest
+    concurrency:
+      group: apple-refurb-monitor
+      cancel-in-progress: true
+
     permissions:
-      contents: write   # so we can push updated seen_products.json
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
