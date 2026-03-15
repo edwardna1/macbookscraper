@@ -1,11 +1,11 @@
-"""Filter products: MacBook Pro, M2/M3/M4 Pro, RAM >= 36GB. Optional: prefer 1TB+ SSD."""
+"""Filter products: MacBook Pro, M2/M3/M4 Pro, RAM >= 24GB. Optional: prefer 1TB+ SSD."""
 import logging
 from typing import Any
 
 logger = logging.getLogger(__name__)
 
 TARGET_CHIPS = ("M4 Pro", "M3 Pro", "M2 Pro")
-MIN_RAM_GB = 36
+MIN_RAM_GB = 24
 PREFER_SSD_GB = 1024  # 1TB+
 
 
@@ -25,7 +25,7 @@ def _matches_chip(p: dict[str, Any]) -> bool:
 def _matches_ram(p: dict[str, Any]) -> bool:
     ram = p.get("ram_gb")
     if ram is None:
-        # Not known from listing/detail - exclude (we require 36GB+)
+        # Not known from listing/detail - exclude (we require 24GB+)
         return False
     try:
         return int(ram) >= MIN_RAM_GB
@@ -35,7 +35,7 @@ def _matches_ram(p: dict[str, Any]) -> bool:
 
 def filter_products(products: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """
-    Keep only: MacBook Pro, chip in (M4 Pro, M3 Pro, M2 Pro), RAM >= 36GB.
+    Keep only: MacBook Pro, chip in (M4 Pro, M3 Pro, M2 Pro), RAM >= 24GB.
     Optional: prefer 1TB+ SSD (we don't exclude smaller, just rank lower later).
     """
     out = []
@@ -47,5 +47,5 @@ def filter_products(products: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if not _matches_ram(p):
             continue
         out.append(p)
-    logger.info("Filtered to %s matches (MacBook Pro, M2/M3/M4 Pro, 36GB+ RAM)", len(out))
+    logger.info("Filtered to %s matches (MacBook Pro, M2/M3/M4 Pro, 24GB+ RAM)", len(out))
     return out

@@ -60,6 +60,8 @@ def send_telegram(body: str) -> bool:
     if not config.telegram_configured():
         logger.warning("Telegram not configured; skipping alert")
         return False
+    if len(body) > MAX_MESSAGE_LENGTH:
+        body = body[: MAX_MESSAGE_LENGTH - 20] + "\n…(truncated)"
     url = f"{TELEGRAM_API}/bot{config.TELEGRAM_BOT_TOKEN}/sendMessage"
     payload = {"chat_id": config.TELEGRAM_CHAT_ID, "text": body}
     try:
@@ -71,6 +73,12 @@ def send_telegram(body: str) -> bool:
     except Exception as e:
         logger.exception("Telegram send failed: %s", e)
         return False
+
+
+def send_error(title: str, message: str) -> bool:
+    """Send an error notification to Telegram. Returns True if sent."""
+    body = f"MacBook monitor — {title}\n\n{message}"
+    return send_telegram(body)
 
 
 def alert_new_and_price_drops(

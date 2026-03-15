@@ -22,21 +22,30 @@ logger = logging.getLogger(__name__)
 def run_once() -> None:
     """Single cycle: fetch, parse, filter, rank, compare to seen, alert, save."""
     try:
-        products = parser.fetch_all(
-            listing_url=config.APPLE_REFURB_BASE_URL,
-            fetch_details_for_macbook_pro=True,
-        )
+        _run_once_body()
     except Exception as e:
-        logger.exception("Fetch/parse failed: %s", e)
-        return
+        logger.exception("Monitor run failed: %s", e)
+        err_msg = f"{type(e).__name__}: {e}"
+        if config.telegram_configured():
+            alerts.send_error("Error", err_msg)
+
+
+def _run_once_body() -> None:
+    """Inner logic of one monitor cycle; exceptions propagate to run_once for error reporting."""
+    products = parser.fetch_all(
+        listing_url=config.APPLE_REFURB_BASE_URL,
+        fetch_details_for_macbook_pro=True,
+    )
 
     if not products:
         logger.warning("No products parsed")
+        if config.telegram_configured():
+            alerts.send_error("Warning", "No products parsed from Apple — listing may have changed or be down.")
         return
 
     matched = filters.filter_products(products)
     if not matched:
-        logger.info("No matches (M2/M3/M4 Pro, 36GB+ RAM)")
+        logger.info("No matches (M2/M3/M4 Pro, 24GB+ RAM)")
         return
 
     ranked = ranker.rank_by_value(matched)
