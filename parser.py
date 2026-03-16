@@ -33,7 +33,7 @@ def _normalize_price(raw: str) -> float | None:
 
 
 def _parse_chip(title: str) -> tuple[str | None, str | None]:
-    """Return (generation, tier) e.g. ('M4', 'Pro'). Tier can be Pro, Max, etc."""
+    """Return (generation, tier) e.g. ('M4', 'Pro') or ('M4', '') for base M4."""
     if not title:
         return None, None
     # M4 Pro, M3 Pro, M2 Pro, M4 Max, etc.
@@ -43,6 +43,13 @@ def _parse_chip(title: str) -> tuple[str | None, str | None]:
     m = re.search(r"(M\d+)\s+(Pro|Max|Ultra)\s+", title, re.I)
     if m:
         return m.group(1).upper(), m.group(2).capitalize()
+    # Base M4 / M3 chip (e.g. MacBook Air)
+    m = re.search(r"Apple\s+(M\d+)\s+[Cc]hip", title)
+    if m:
+        return m.group(1).upper(), ""
+    m = re.search(r"(M\d+)\s+[Cc]hip", title)
+    if m:
+        return m.group(1).upper(), ""
     return None, None
 
 
@@ -113,6 +120,13 @@ def _is_refurbished_macbook_pro(title: str) -> bool:
     return "refurbished" in t and "macbook pro" in t
 
 
+def _is_refurbished_macbook_air(title: str) -> bool:
+    if not title:
+        return False
+    t = title.lower()
+    return "refurbished" in t and "macbook air" in t
+
+
 def _build_product(
     title: str,
     price: float | str | None,
@@ -132,6 +146,7 @@ def _build_product(
         "screen_inches": _parse_screen(title),
         "color": _parse_color(title),
         "is_refurbished_macbook_pro": _is_refurbished_macbook_pro(title),
+        "is_refurbished_macbook_air": _is_refurbished_macbook_air(title),
     }
 
 
@@ -327,6 +342,19 @@ def fetch_all(
                 continue
             chip = (p.get("chip_generation") or "") + " " + (p.get("chip_tier") or "")
             if "Pro" not in chip or p.get("chip_generation") not in ("M2", "M3", "M4"):
+                continue
+            if p.get("ram_gb") is not None:
+                continue
+            url = p.get("url")
+            if not url:
+                continue
+            ram, ssd = fetch_product_detail(url)
+            p["ram_gb"] = ram
+            p["ssd_gb"] = ssd
+        for p in products:
+            if not p.get("is_refurbished_macbook_air"):
+                continue
+            if (p.get("chip_generation") or "") != "M4":
                 continue
             if p.get("ram_gb") is not None:
                 continue

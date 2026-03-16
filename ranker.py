@@ -1,7 +1,7 @@
 """Rank matches by best value: price, chip priority, SSD. Assign value score and best-deal flag."""
 from typing import Any
 
-CHIP_PRIORITY = {"M4 Pro": 3, "M3 Pro": 2, "M2 Pro": 1}
+CHIP_PRIORITY = {"M4 Pro": 3, "M3 Pro": 2, "M2 Pro": 1, "M4": 1}
 
 
 def _chip_label(p: dict[str, Any]) -> str:
@@ -9,7 +9,7 @@ def _chip_label(p: dict[str, Any]) -> str:
     tier = (p.get("chip_tier") or "").strip()
     if gen and tier:
         return f"{gen} {tier}"
-    return ""
+    return gen or ""
 
 
 def _price_value(p: dict[str, Any]) -> float:

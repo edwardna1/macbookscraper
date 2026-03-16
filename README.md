@@ -2,7 +2,8 @@
 
 Lightweight monitor that watches Apple Canada’s refurbished Mac store for **MacBook Pro** deals matching:
 
-- **M4 Pro**, **M3 Pro**, or **M2 Pro** with **24GB+ RAM**
+- **MacBook Pro:** M4 Pro, M3 Pro, or M2 Pro with **24GB+ RAM**
+- **MacBook Air:** M4 with **32GB+ RAM**
 
 It ranks matches by value, avoids duplicate alerts using a local JSON store, and can notify you via **Telegram** for new matches or price drops.
 
@@ -56,7 +57,7 @@ Without Telegram configured, the monitor still runs and logs what it would have 
 |------------|------|
 | `monitor.py` | Main loop: fetch → parse → filter → rank → storage → alert |
 | `parser.py`  | Fetch Apple refurb listing and product detail pages; normalize to structured products |
-| `filters.py` | Keep only MacBook Pro, M2/M3/M4 Pro, RAM ≥ 24GB |
+| `filters.py` | MacBook Pro 24GB+ (M2/M3/M4 Pro) or MacBook Air M4 32GB+ |
 | `ranker.py`  | Value score and sort; mark best current deal |
 | `alerts.py`  | Telegram Bot message formatting and send |
 | `storage.py` | JSON file: seen product IDs, last price, last alerted (for new vs price-drop alerts) |

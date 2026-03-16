@@ -45,7 +45,7 @@ def _run_once_body() -> None:
 
     matched = filters.filter_products(products)
     if not matched:
-        logger.info("No matches (M2/M3/M4 Pro, 24GB+ RAM)")
+        logger.info("No matches (Pro 24GB+ or Air M4 32GB+)")
         return
 
     ranked = ranker.rank_by_value(matched)
